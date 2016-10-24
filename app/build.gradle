@@ -1,0 +1,95 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.3"
+    defaultConfig {
+        applicationId "com.example.ibesteeth.gjj_td"
+        minSdkVersion 15
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    //签名配置
+    signingConfigs {
+        debug {
+            keyAlias 'youmeng'
+            keyPassword '123456'
+            storeFile file("../youmeng_test.jks")
+            storePassword '123456'
+        }
+        release {
+            //key别名
+            keyAlias 'youmeng'
+            //key密码
+            keyPassword '123456'
+            //密钥文件路径
+            storeFile file("../youmeng_test.jks")
+            //密钥文件密码
+            storePassword '123456'
+        }
+    }
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.release
+        }
+
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled true //控制是否运行混淆的
+            //加载默认混淆配置文件
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.release
+        }
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //修改输出文件的名称
+//            applicationVariants.all { variant ->
+//                variant.outputs.each {
+//                    output ->
+//                    def outputFile = output.outputFile
+//                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+//                        // 输出apk名称为dt_android360_v1.0_0705114322.apk
+//                        def fileName = "App_${variant.productFlavors[0].name}_v${defaultConfig.versionName}_${new Date().format("MMddhhmmss")}.apk"
+//                        output.outputFile = new File(outputFile.parent, fileName)
+//                    }
+//                }
+//            }
+        }
+    }
+    //渠道Flavors，配置不同风格的app
+    productFlavors {
+        ibesteeth{}
+        huawei {}
+        xiaomi {}
+//        googleplay {}
+        wandoujia {}
+        baidu {}
+        yingyongbao {}
+        android360 {}
+        uc {}
+        umeng {}
+        meizu{}
+        //批量配置
+        productFlavors.all { flavor ->
+            flavor.manifestPlaceholders = [TD_CHANNEL_VALUE: name]
+        }
+
+    }
+
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:appcompat-v7:24.2.0'
+    testCompile 'junit:junit:4.12'
+    compile files('libs/TalkingData_Analytics_Android_SDK_V2.2.37.jar')
+}
